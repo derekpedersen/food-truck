@@ -4,15 +4,18 @@ build:
 
 # build binary targeting windows
 build-windows:
-	go build -o bin/food-truck.windows GOOS=windows GOARCH=386
+	GOOS=windows GOARCH=386 go build -o bin/food-truck.windows
 
 # build binary targeting linux
 build-linux:
-	go build -o bin/food-truck.linux GOOS=linux GOARCH=386
+	GOOS=linux GOARCH=386 go build -o bin/food-truck.linux 
 
 # build binary targeting mac
 build-mac:
-	go build -o bin/food-truck.mac GOOS=mac GOARCH=386
+	GOOS=darwin GOARCH=amd64 go build -o bin/food-truck.mac 
+
+# build all the binaries!
+build-all: build build-windows build-linux build-mac
 
 # docker image
 docker:
