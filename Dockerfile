@@ -10,7 +10,7 @@ RUN apt-get update \
  && rm -r /var/lib/apt/lists/*
 
 # Copy the local package files to the container's workspace.
-COPY ./bin/food-truck /go/bin/
+COPY ./bin/food-truck.linux /go/bin/
 
 # Run the command by default when the container starts.
-CMD /go/bin/food-truck
+CMD /go/bin/food-truck.linux

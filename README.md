@@ -37,4 +37,3 @@ This project was built using [Golang](https://golang.org). One of the benefits o
 #### Docker
 
 This project contains a [Dockerfile](https://docs.docker.com/engine/reference/builder/) which allows the user to build a docker image using a [debian](https://www.debian.org/) based container.
-

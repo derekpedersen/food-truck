@@ -17,6 +17,7 @@ build-mac:
 # build all the binaries!
 build-all: build build-windows build-linux build-mac
 
-# docker image
+# docker is set to use the pre-compiled food-truck.linux as it's a debian based image
 docker:
 	docker build ./ -t food-truck:latest --no-cache
+	docker run --name food-truck --rm -i -t food-truck
