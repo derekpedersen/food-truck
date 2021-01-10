@@ -11,7 +11,7 @@ import (
 	"food-truck/service"
 
 	// This is an example of aliasing a pkg, can be used when the pkg name contains special characters
-	// of like in this case I want to override the use of the default log library to use a more enhanced one
+	// or like in this case I want to override the use of the default log library to use a more enhanced one
 	log "github.com/sirupsen/logrus"
 )
 
@@ -21,22 +21,31 @@ func main() {
 	// as it can enfore simplicity of design and easily elevate smells of when a microservice
 	// is becoming too complicated
 	repo := repository.NewFoodTruckRepository("https://data.sfgov.org/resource/jjew-r69b")
+
+	// Using dependency injection I can send it whatever repository I wish as long as it implements the
+	// expected interface. This is nice as we might not actually swap from a SODA API to a MySQL
+	// repository, we can now easily supply a mocked version of the interface to test all the different
+	// paths easier in our unit tests
 	svc := service.NewFoodTruckService(repo)
 
-	foodTrucks, err := svc.FindOpenFoodTrucks()
+	// Retrieve the set of open food trucks and handle any errors appropriately, which in this case
+	// means we can't do anything... so we need to exit with an error code
+	foodTruckPages, err := svc.FindOpenFoodTrucks()
 	if err != nil {
 		log.Error(err)
+		fmt.Println("Well this is quite embarrasing, we've seemed to have an encountered an unforeseen error. We do apologize and please try us again.")
+		os.Exit(1)
 	}
 
-	// print all of the food trucks in a formatted list
-	for k, v := range foodTrucks {
+	// Now we will iterate through the pages of food trucks
+	for k, v := range foodTruckPages {
 		if v == nil || len(v) == 0 {
 			continue
 		}
 		print(v)
 
 		// check if this was the last page to print
-		if k == (len(foodTrucks) - 1) {
+		if k == (len(foodTruckPages) - 1) {
 			fmt.Println("\nTh-th-th-that's all folks!")
 			break
 		}
@@ -49,6 +58,9 @@ func main() {
 	}
 }
 
+// print will handle the formatting of the list of food trucks
+// I've broken this out into a separte func for reasons of separation
+// of concerns and testability
 func print(foodTrucks []model.FoodTruck) {
 	writer := tabwriter.NewWriter(os.Stdout, 0, 8, 1, '\t', tabwriter.AlignRight)
 	fmt.Fprintln(writer, "NAME\tADDRESS")
@@ -58,6 +70,7 @@ func print(foodTrucks []model.FoodTruck) {
 	writer.Flush()
 }
 
+// proceed will determine if the user wants us to move onto the next page or end
 func proceed() bool {
 	var nextPage *bool
 	for ok := true; ok; ok = (nextPage == nil) {
@@ -69,6 +82,9 @@ func proceed() bool {
 	return *nextPage
 }
 
+// wouldYouLikeToKnowMore is responsible for asking and then interpreting the response into a
+// result that we can use to determine if the user wants to proceed (true), if they want to stop (false),
+// or if we don't understand their input (nil)
 func wouldYouLikeToKnowMore() *bool {
 	fmt.Println("Would you like to know more? (Yes/No)")
 	var input string

@@ -13,11 +13,15 @@ type FoodTruckService interface {
 }
 
 // FoodTruckServiceImpl is the implementation of the FoodTruckService interface
+// with it only requiring an implementation of a defined interface we are taking
+// advantage of dependency injection by injecting the type of repository we need/use
 type FoodTruckServiceImpl struct {
 	repo repository.FoodTruckRepository
 }
 
 // NewFoodTruckService creates a new instance of the FoodTruckService
+// some more go boiler plate but it took just as long to write the comment
+// explaining it, so no harm no foul
 func NewFoodTruckService(repo repository.FoodTruckRepository) FoodTruckServiceImpl {
 	return FoodTruckServiceImpl{
 		repo: repo,
@@ -25,11 +29,15 @@ func NewFoodTruckService(repo repository.FoodTruckRepository) FoodTruckServiceIm
 }
 
 // GetFoodTrucks will return all of the FoodTrucks
+// I used this as a starting point but opted to keep it for my own debugging purposes
+// to compare against the result in FindOpenFoodTrucks
 func (svc FoodTruckServiceImpl) GetFoodTrucks() ([]model.FoodTruck, error) {
 	return svc.repo.GetFoodTrucks()
 }
 
 // FindOpenFoodTrucks will only return the FoodTrucks that are currently open
+// using page blocks of 10 results, ideally in the future I would to implement
+// a way to page back and forth through the set
 func (svc FoodTruckServiceImpl) FindOpenFoodTrucks() ([][]model.FoodTruck, error) {
 	// get the set of open food trucks from the repository
 	foodTrucks, err := svc.repo.FindOpenFoodTrucks(time.Now())

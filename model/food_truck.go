@@ -2,7 +2,10 @@ package model
 
 // FoodTruck represents the API reponse from https://data.sfgov.org/resource/jjew-r69b
 // Golang is a strongly typed language so ideally these fields
-// would be strictly defined but the SODA api appears to only return strings
+// would typed defined but the SODA api appears to only return strings however
+// there is a well-known solution to this problem, it's too simply overwrite
+// the json Marshall and Unmarshall funcs https://golang.org/pkg/encoding/json/ I chose not
+// to implement that here due to time limitations
 type FoodTruck struct {
 	DayOrder         string   `json:"dayorder"`
 	DayOfWeekStr     string   `json:"dayofweekstr"`
