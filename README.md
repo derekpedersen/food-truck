@@ -39,9 +39,7 @@ If you want to compile this program locally you will need follow these steps:
 2. Copy the project to `go/src/food-truck`
 3. Execute `go build -o bin/food-truck`
 
-### Anonymity
+#### Anonymity
 
 In an effort to comply with requirement that this project be as annonymous as possible I wrote this project from the `/usr/local/go` folder. 
-
-`sudo chown -R $(whoami) /usr/local`
 
