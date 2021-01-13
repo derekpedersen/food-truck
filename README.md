@@ -36,7 +36,8 @@ If you only have Docker prereqs installed you can run:
 If you want to compile this program locally you will need follow these steps:
 
 1. [Install Golang following these instructions](https://golang.org/doc/install)
-2. 
+2. Copy the project to `go/src/food-truck`
+3. Execute `go build -o bin/food-truck`
 
 ### Anonymity
 
